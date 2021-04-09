@@ -1,1 +1,7 @@
 My Linux cheatsheet
+
+# Access log info
+
+zcat access_log/* | grep '20/Mar' | awk {'print $1'} | sort -n | uniq -c | sort -nr | head -10
+grep -r 'Jan 19 19:[4-6]' /var/log/* | grep -iE 'gratuitous|keepalive|arp'
+cat access-logs/* | grep `date +'%d/%b/%Y'` | awk {'print $1'} | sort | uniq -c | sort -nr | head -n 10
