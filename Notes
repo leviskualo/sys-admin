@@ -1,0 +1,395 @@
+Kualo cmd:
+
+/usr/bin/clamscan - clamav scan
+
+Cloudflare integration
+bash <(curl -s https://raw.githubusercontent.com/cloudflare/CloudFlare-CPanel/master/cloudflare.install.sh) -k 8908bdfa74c232d17c3fdbfd0d8c0923 -n 'Your Hosting Provider'
+
+for shared accounts
+bash <(curl -s https://raw.githubusercontent.com/cloudflare/CloudFlare-CPanel/master/cloudflare.install.sh) -k b4603acd6cceeae8cd8d0f0f39c65f5f -n 'Kualo'
+
+WHM Login 
+whmapi1 create_user_session user=root service=whostmgrd locale=en | grep url | cut -c 8-
+
+cPanel troubleshoot
+curl -s https://ssp.cpanel.net/run | sh
+
+cPanel 3rd party tools
+/usr/local/cpanel/3rdparty/bin
+
+
+ 878  2020-07-22 09:29:09 grep 46.229.173.68 /var/log/lfd.log
+  879  2020-07-22 09:29:13 zgrep 46.229.173.68 /var/log/lfd.log-20*
+  882  2020-07-22 09:33:51 grep 46.229.173.66 /var/log/lfd.log
+  883  2020-07-22 09:34:14 zgrep 46.229.173.66 /var/log/lfd.log-*
+  884  2020-07-22 09:35:16 zgrep 46.229.173.67 /var/log/lfd.log-*
+  885  2020-07-22 09:35:32 zgrep 46.229.173.68 /var/log/lfd.log-*
+  959  2020-07-23 14:09:15 tail -50 /var/log/lfd.log
+  960  2020-07-23 14:09:44 grep -u brute /var/log/lfd.log | tail -10
+  961  2020-07-23 14:09:52 grep -u 465 /var/log/lfd.log | tail -10
+  963  2020-07-23 14:11:31 grep 52.228.0.136 /var/log/lfd.log
+  964  2020-07-23 14:11:35 zgrep 52.228.0.136 /var/log/lfd.log-20*
+  965  2020-07-23 14:11:42 grep 34.68.203.173 /var/log/lfd.log
+  966  2020-07-23 14:11:46 zgrep 34.68.203.173 /var/log/lfd.log*
+  967  2020-07-23 14:11:55 grep -i attempts /var/log/lfd.log
+  968  2020-07-23 14:11:59 grep -i attempt /var/log/lfd.log
+  969  2020-07-23 14:12:07 tail -500 /var/log/lfd.log
+  970  2020-07-23 14:12:24 grep -v 'mod_security\|' /var/log/lfd.log | tail -10
+  971  2020-07-23 14:12:31 grep -v 'mod_security' /var/log/lfd.log | tail -10
+  972  2020-07-23 14:12:42 grep -v 'mod_security\|Exim syntax ' /var/log/lfd.log | tail -10
+  973  2020-07-23 14:12:51 grep -v 'mod_security\|Exim syntax ' /var/log/lfd.log | tail -500
+  974  2020-07-23 14:13:55 grep Failed /var/log/lfd.log
+  975  2020-07-23 14:14:05 grep Failed /var/log/lfd.log | grep -v cPanel
+  976  2020-07-23 14:14:11 grep Failed /var/log/lfd.log | grep -v 'cPanel\|SSH'
+  977  2020-07-23 14:14:22 grep Failed /var/log/lfd.log | grep -v 'cPanel\|SSH\|IMAP'
+  998  2020-07-23 14:32:10 grep 86.134.214.236 /var/log/lfd.log
+
+  for list in `cat list`; do quota -sv $list | awk '{ print $5; }' | grep -v grace; done
+
+
+/etc/csf/csf.allow
+tcp|out|d=465|u=1492
+tcp|out|d=587|u=1492
+tcp|out|d=25|u=1492
+csf -dr 2.37.53.88
+kxfw -c
+to allow specific port traffic 
+/etc/csf/csf.conf
+
+kill mysql crawler
+for KILL in `mysqladmin pr|grep vantage_user|awk{'print $2'}`;do mysql -e "kill $KILL";done
+
+kill processes from a user since Aug15
+for KILL in ps aufx | grep humberdawgs | grep Aug15 | awk {'print $2'}; do kill 9 $KILL; done
+
+check for inodes
+echo "Detailed Inode usage for: $(pwd)" ; for d in `find -maxdepth 1 -type d |cut -d\/ -f2 |grep -xv . |sort`; do c=$(find $d |wc -l) ; printf "$c\t\t- $d\n" ; done ; printf "Total: \t\t$(find $(pwd) | wc -l)\n"
+
+
+exim spamming command
+grep cwd /var/log/exim_mainlog |awk {'print $4'} |awk -F "=" {'print $2'} |sort |uniq -c |sort -n  |tail
+
+access-logs -> /etc/apache2/logs/domlogs/demoonethirdstor
+
+when df -h, su -sch don't update, check to see if there are any open deleted file on a filesystem
+lsof /mount/point | grep '(deleted)'
+
+Whenever you create/terminate hosting account on/from the server the process will generate some logs :
+Location : /var/cpanel/accounting.log
+Description : Contains a list of accounting functions performed through WHM, including account removal and creation..
+
+
+install softaculous
+wget -N http://files.softaculous.com/install.sh
+chmod 755 install.sh
+./install.sh --reinstall
+
+ps aux | grep lsphp | grep colinblu | awk {'print $2'} | xargs kill
+
+ root@oberon.ldn.kgix.net ~ # cd /var/cpanel/userdata/
+root@oberon.ldn.kgix.net /var/cpanel/userdata # for FILE in grep -rl "owner: whitelabel" ./* | awk -F/ '{print $2}' | sort | uniq; do cat $FILE/main | grep main_domain | awk {'print $2'}; done
+
+du -sch .[!.]* * |sort -h
+
+for i in `cat userlist`;do /scripts/restorepkg $i;done
+
+mount -oremount,rw /proc
+
+/var/log/secure
+
+ls -a|egrep "^\."
+
+ps -elf | grep $1 | gawk -F" " '{print $4'}
+
+
+Replace php.ini value for all whm users
+993  2020-08-26 08:34:59 for user in $(ls -1 /var/cpanel/users) ; do version=$(selectorctl -c -u $user | awk '{print $1}') ; echo $user $version ; done
+  994  2020-08-27 15:39:35 cat /etc/trueuserdomains
+  995  2020-08-27 15:40:26 selectorctl --replace-options=post_max_size:64M,upload_max_filesize:64M --version=7.4 --user=twinsock
+  996  2020-08-27 15:40:49 selectorctl --print-options --version=7.4 --user=twinsock
+
+  998  2020-08-27 15:42:16 users=`cat /etc/userdomains | awk {'print $2'} | grep -v "nobody\|tech" | sort | uniq`; for i in $users; do selectorctl --replace-options=post_max_size:64M,upload_max_filesize:64M --version=7.4 --user=$i; done
+  999  2020-08-27 15:44:04 cagefsctl --remount-all
+
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 64M/g' /opt/alt/php*/etc/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 64M/g' /opt/alt/php*/etc/php.ini
+cagefsctl --force-update
+Replaced for all users:
+users=cat /etc/userdomains | awk {'print $2'} | grep -v "nobody\|tech" | sort | uniq; for i in $users; do selectorctl --replace-options=post_max_size:64M,upload_max_filesize:64M --version=7.4 --user=$i; done
+cagefsctl --remount-all
+
+terminate whm reseller account domains
+RESELLER_USERNAME="uksno1";
+for MYUSER in `cat /etc/trueuserowners | grep ${RESELLER_USERNAME}$ | awk -F: {'print $1'}`; do /usr/local/cpanel/bin/whmapi1 removeacct user=${MYUSER} keepdns=1; done
+
+List all cPanel email accounts
+for USER in `cat /etc/trueuserowners | grep ${RESELLER_USERNAME}$ | awk -F: {'print $1'}`; do uapi --user=${USER} Email list_pops | grep email | sed 's/email://'; done
+
+for i in `cat /etc/localdomains`; do grep -E ^$i: /etc/userdomains ; done | sed 's/://g' | awk '{ system("cat /home/"$2"/etc/"$1"/passwd") }' 2>/dev/null | wc -l
+
+Enable SSH access for all reseller accounts
+ssh_reseller="sharkhos";
+for ssh_user in `cat /etc/trueuserowners | grep ${ssh_reseller}$ | awk -F: {'print $1'}`; do chsh $ssh_user -s /bin/bash;done
+
+
+
+Remove all messages sent by the spammer@example.tld user within the last 30 minutes
+exiqgrep -f spammer@example.tld -y 1800 -i | xargs exim -Mrm
+
+list IPTables
+alias iptlist="sudo /sbin/iptables -L -n -v --line-numbers"
+alias iptlistin="sudo /sbin/iptables -L INPUT -n -v --line-numbers"
+alias iptlistout="sudo /sbin/iptables -L OUTPUT -n -v --line-numbers"
+alias iptlistfw="sudo /sbin/iptables -L FORWARD -n -v --line-numbers"
+
+Generate server fingerprint
+ssh-keyscan
+ssh-keygen -lf <(ssh-keyscan hostname 2>/dev/null)
+ssh -o FingerprintHash=md5 viola.ldn.kualo.net
+ssh -o -p 22007 FingerprintHash=md5 viola.ldn.kualo.net
+ssh -o -P 22007 FingerprintHash=md5 viola.ldn.kualo.net
+ssh -p22007 -o FingerprintHash=md5 viola.ldn.kualo.net
+
+Print Exim queue
+exim -bpc
+exim -bp | awk {'print $4'} | sort | uniq -c | sort -rnk1 | head
+chmod +x /root/bin/chpop (change email password)
+
+Add default magento crons
+php bin/magento cron:install
+
+Imapsync
+imapsync --authmech1 PLAIN --ssl1 --host1 mail.lumison.net --user1 marjory.dougal@edinburghyouthorchestra.org --password1 'pWpi3Wyb' --host2 localhost --user2 marjory.dougal@edinburghyouthorchestra.org --password2 'pWpi3Wyb'
+
+Get email bandwidth usage
+root@ds1.dentonscreative.com ~ # less /var/log/maillog |grep roz@dogandfoxinn.com |grep -Po 'out\=.+?,' |cut -d '=' -f2 |tr -d ,|awk '{s+=$1} END {print "total: ", s, " bytes transferred over IMAP"}'
+total: bytes transferred over IMAP
+
+PHP binary path
+/opt/alt/php70/usr/bin/php
+/usr/local/bin/ea-php74
+
+Litespeed blocking countries
+<IfModule mod_geoip.c>
+RewriteEngine on
+RewriteCond %{ENV:GEOIP_COUNTRY_CODE} ^(AF|BH|BT|KH|CN|IN|ID|IR|IQ|IL|JO|KP|KR|LA|LB|MY|MV|MN|MM|NP|PK|PH|SG|LK|SY|TW|TH|TR|VN|YE|BN|MO|FJ|KI|MH|FM|NR|NZ|PG|SB|TO|VU|WS|TV|DZ|AO|AR|BZ|BJ|BO|BW|BR|BF|BI|CM|CV|CF|TD|CL|CO|KM|CG|CD|CR|DJ|EC|EG|SV|GQ|ER|ET|GA|GA|GM|GH|GT|GN|GW|HN|CI|KE|LS|LR|LY|MG|MW|ML|MR|MU|MX|MA|MZ|NA|NI|NE|NG|PA|PE|RU|ST|RW|SN|SC|SL|SO|ZA|SS|SZ|TZ|TG|TN|TR|UG|VE|ZM|ZW|IR|IQ|SA|SY|YE)$
+RewriteRule (shop|product) - [F,L]
+</IfModule>
+
+
+for i in $(seq 1 10); do curl -s -q -w "Response Code: %{http_code}, Connect Time: %{time_connect}, Total Time: %{time_total}\n" https://httpapi.com/ping.jsp; done
+
+find /home/ -size +500k -name error_log -type f -exec du -h {} \; | sort -n | mail -s "500k error logs" robin@redrhino.co.uk
+
+find /home/ -size +5M -type f -exec du -h {} \; | sort -n | mail -s "over 5mg files" robin@redrhino.co.uk
+
+
+Restart apache
+/scripts/restartsrv_httpd
+Rebuild vHost
+/scripts/rebuildhttpdconf
+
+Check server uptime
+lynx --dump http://127.0.0.1/server-status/|grep -i "Server uptime"
+
+cPanel has the server status under a different URL:
+lynx --dump http://127.0.0.1/whm-server-status/|grep -i "Server uptime"
+
+exigrep 'nigel.frampton@t-online.de' /var/log/exim4/mainlog
+
+/servertools/maintainer.new/directories.skip
+
+ps aux | awk '/levisjani/{total+=$6}END{print "Total: "total/1024" MB"}'
+
+rsync $(tar cf - MyBackups | 7za a -an -txz -si -so) \
+  user@server:/path/to/backup
+
+imunify360-agent malware malicious list --user misc --search oodlescoventry --limit 1000 > /home/misc/oodlescoventry_malware.log
+imunify360-agent remote-proxy add 50.115.17.254 --name "railgun_server"
+imunify360-agent remote-proxy list
+
+Script to update MySQL disk usage manually:
+/usr/local/cpanel/scripts/update_db_cache
+
+delete all sent mail:
+find /home/*/mail/*/*/.Sent/cur -type f -exec rm -f {} \;
+
+mysql log
+/var/log/mysql
+mysqladmin pr | awk {'print $4'} | grep -v 'root\|system' | sort | uniq -c | sort -nr | head
+
+rsync -avh -e "ssh -p 22007" /home/vocrehab/ vocrehab@bianca.ldn.kgix.net:/home/vocrehab/
+
+service pdns-recursor restart
+
+cPanel SSL script
+/usr/local/cpanel/bin/checkallsslcerts
+
+Magento upgrade:
+php bin/magento maintenance:enable
+composer require magento/product-community-edition 2.3.5-p2 --no-update
+php bin/magento setup:upgrade
+php bin/magento setup:di:compile
+php bin/magento setup:static-content:deploy en_GB en_US
+php bin/magento cache:enable
+php bin/magento maintenance:disable
+php bin/magento indexer:reindex && php bin/magento cache:clean && php bin/magento cache:flush
+
+In this case, it should be the same thing, however using:
+
+composer require magento/product-community-edition=2.4.0 --no-update
+
+instead of:
+
+composer require magento/product-community-edition 2.3.5-p2 --no-update
+
+xbstream -x -C /mysql/data/
+
+MySQL dump:
+mysqldump --single-transaction heatingboutique_nov16 -r /home/heatingboutique_nov16.$(date +%s).sql
+
+Convert MySQL from MyISAM to InnoDB:
+mysql heatingboutique_nov16 -Bse 'show tables;' | xargs -i mysql heatingboutique_nov16 -Bse 'ALTER TABLE {} ENGINE=InnoDB;'
+
+DMARC record
+v=DMARC1;p=none;sp=none;adkim=r;aspf=r;pct=100;fo=0;rf=afrf;ri=86400
+
+Strace CloudLinux
+  884  2020-11-27 14:23:30 while true; do strace -s 5000 -e -p $(ps aux | grep '/home/kgixchk/public_html/wp/index.php' | grep -v grep | awk '{print $2}'); done
+
+List cpanel accounts with most lsphp processes
+ps aux | grep lsphp | awk {'print $1'} | sort | uniq -c | sort -nr | head -30
+
+Set timezone in Cloudlinux
+for USER in `grep asapdevc /etc/trueuserowners | cut -d : -f 1`; do selectorctl --add-options=date.timezone:Europe/London --version=7.0 --user=$USER; done
+
+####DB conversion from MyISAM to InnoDB####
+1) Created a list with the DB names:
+
+for ACC in `grep erjjiost /etc/trueuserowners | cut -d : -f 1`; do nice -n -19 ionice -c3 find /home/$ACC/ -type f -name wp-config.php -exec grep DB_NAME {} \; | awk {'print $3'} | cut -d"'" -f2 >> /home/tech/T/InnoDB/erjjiost-accs; done
+
+2) Created backups:
+
+for DB in `cat /home/tech/T/InnoDB/erjjiost-accs`; do mysqldump --single-transaction $DB -r /home/tech/T/InnoDB/$DB.$(date +%s).sql; done
+
+3) And bulk altered:
+
+for DB in `cat /home/tech/T/InnoDB/erjjiost-accs`; do mysql $DB -Bse 'show tables;' | xargs -i mysql $DB -Bse 'ALTER TABLE {} ENGINE=InnoDB;'; done
+#############################################
+
+view the RES memory in human readable form
+ps aux | awk '{$5=int(100 * $6/1024/1024)/100"GB";}{ print;}' | grep rucomf
+
+
+###PHP PATH###
+/opt/alt/php70/usr/bin/php
+/opt/alt/php71/usr/bin/php bin/magento c:c
+
+disable php errors -> ini_set('display_errors', 0); 
+php_value memory_limit 2048M 
+php_value max_input_vars 10000
+/etc/cl.php.d/alt-php72 $ php -i | grep disable_f (disable mail function)
+
+# switch user #
+root@montague.ldn.kualo.net ~ # cagefsctl -e marine
+bash-4.2# cd /etc/cl.php.d
+bash-4.2# grep -R 'max_input' *
+alt-php52/alt_php.ini:max_input_vars=25000
+##############
+
+
+### Apache/Litespeed disable per account ###
+For Non-SSL configurations
+/etc/apache2/conf.d/userdata/std/2_4/$USER/yourdomain.com/lscache.conf
+
+<IfModule LiteSpeed>
+CacheEngine off
+LiteMage off
+</IfModule>
+
+For SSL configurations
+/etc/apache2/conf.d/userdata/ssl/2_4/$USER/yourdomain.com/lscache.conf
+#####################
+
+### Litespeed Ram cache root config ###
+/usr/local/apache/conf/includes/pre_main_global.conf
+--> CacheRoot /home/lscache/
+--> CacheRoot /dev/shm/lscache_server
+
+/usr/local/apache/conf/userdata/lscache_vhosts.conf
+--> CacheRoot lscache
+--> CacheRoot /dev/shm/lscache_vhost/$vh_domain
+
+/etc/apache2/conf.d/userdata/std/2_4/$USER/yourdomain.com/customphpini.conf
+--> add custom php.ini variables
+SetEnv PHPRC /home/$USER/public_html/ --> directive to enable per-user configuration handling in a custom include configuration
+PHP_INI_SCAN_DIR=/home/$USER/public_html/ --> directive to enable per-user configuration handling in a custom include configuration
+
+LSPHP_ENABLE_USER_INI=on
+#######################################
+
+### Restart Litespeed ###
+/usr/local/lsws/bin/lswsctrl restart
+
+/usr/local/lsws/admin/misc/enable_ruby_python_selector.sh
+#########################
+
+### Litespeed log locations ###
+Error log: /usr/local/apache/logs/error_log
+stderr.log: /usr/local/apache/logs/stderr.log
+Rewrite log: /usr/local/apache/logs/error_log
+PHP error log: error_log under user account document root
+Scripts: /usr/local/lsws/admin/misc
+################################
+
+Check server connections
+netstat -atun | awk '{print $4}' | sed -n -e '/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/p' | sed 's/::ffff://' | cut -d: -f1 | sort -n | uniq -c | sort -n | tail -10
+
+
+##### Check iscasi and multipath running #####
+root@cs1.usedkitchenexchange.co.uk /dev # iscsiadm -m session
+tcp: [1] 192.168.215.250:3260,1 iqn.2017-07.ldn.iscsi:ldn1-sp-vol2:usedkitchenexchange-backups (non-flash)
+#####
+The multipath is also there:
+#####
+root@cs1.usedkitchenexchange.co.uk /dev # multipath -ll
+mpath-cs1-backups (330000000d6b8a2a4) dm-0 StorPool,iSCSI DISK
+size=1.0T features='1 queue_if_no_path' hwhandler='0' wp=rw
+`- - policy='round-robin 0' prio=50 status=active
+ `- 2:0:0:0 sda 8:0 active ready running
+#####
+
+
+#### FTP Imunify block ###
+Jan 27 01:46:08 olivia pam_imunify_daemon: time="2021-01-27T01:46:08Z" level=fatal msg="start: listen: listen unix /var/run/ftpd.imunify360.sock: bind: address already in use"
+####
+
+### How to find domains not using specific nameservers (external DNS nameservers) ###
+for DOMAIN in `cat /etc/localdomains`; do echo "Checking $DOMAIN..."; if dig $DOMAIN ns +short | grep -v "kualo.net"; then echo "...$DOMAIN has external DNS"; fi; sleep 1; done
+
+NSDOMAIN="nameserver-domain.ext";
+for DOMAIN in `cat /etc/userdomains | sort | awk 'BEGIN { FS=":"; }; { print $1; };' | grep -v '*'`; do if dig $DOMAIN ns +short | grep -qvi "${NSDOMAIN}"; then echo "---"; echo "$DOMAIN appears to have external DNS. It has nameservers set and resolves as follows:"; echo; dig $DOMAIN ns +short; host www.$DOMAIN; if host www.$DOMAIN | grep -qv "50.115"; then echo; echo 'This domain does NOT resolve to a 50.115 IP and has external nameservers. Please check carefully!'; fi; fi; sleep 1; done
+###
+
+### Litespeed cpanel error ###
+cd /usr/local/src
+wget http://updates.tpa.kualo.net/linux/cpanel/performance-plugins/install_performance_plugins.sh
+chmod 755 install_performance_plugins.sh
+sh install_performance_plugins.sh
+rm -f install_performance_plugins.sh
+/usr/local/cpanel/3rdparty/perl/532/bin/cpanm install Type::Tiny
+/usr/local/cpanel/3rdparty/perl/532/bin/cpanm install Redis
+/usr/local/cpanel/3rdparty/perl/532/bin/cpanm install Cache::Memcached
+/usr/local/cpanel/3rdparty/perl/532/bin/cpanm install Crypt::PBKDF2
+####
+
+### Disable PHP Mail ###
+su -s /bin/bash $cPanel
+cd /etc/cl.php.d/alt-php72
+vim custom.ini > disable_functions = mail
+cp -p custom.ini ../alt-php52/
+php -i | grep disable
+###
+
+### Magento CMD ###
+php bin/magento admin:user:unlock minadmin
