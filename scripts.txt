@@ -1,15 +1,257 @@
 My Linux cheatsheet
 
-# Access log info
+#regenerate vhost
+sudo /usr/local/supercache/bin/generate_ngx_vhosts.sh $cpanel
 
-zcat access_log/* | grep '20/Mar' | awk {'print $1'} | sort -n | uniq -c | sort -nr | head -10
+#softaculous script
+/usr/local/cpanel/3rdparty/bin/php /usr/local/cpanel/whostmgr/docroot/cgi/softaculous/cron.php
+
+zcat elettrodomesticiericambi.it-ssl_log-Mar-2018.gz | grep '20/Mar' | awk {'print $1'} | sort -n | uniq -c | sort -nr | head -10
 grep -r 'Jan 19 19:[4-6]' /var/log/* | grep -iE 'gratuitous|keepalive|arp'
 cat access-logs/* | grep `date +'%d/%b/%Y'` | awk {'print $1'} | sort | uniq -c | sort -nr | head -n 10
 
-# MySQL
+root@m2486 [/home/allholde/public_html]# netstat -na | grep ":443"
+tcp 0 0 0.0.0.0:44343 0.0.0.0:* LISTEN
+root@m2486 [/home/allholde/public_html]# service nginx restart
 
-Kill all user queries
-for PID in `mysqladmin pr | grep db_user | awk ' { print $2; }'`; do mysqladmin kill ${PID}; done
+support@support.com [~]# ll /usr/local/cpanel/logs/access_log
 
-List users connections
-mysqladmin pr | awk {'print $4'} | grep -v 'root\|system' | sort | uniq -c | sort -nr | head
+com3elle@am5 [~/public_html/julesnectar.com]# wp cron event list
+
+giuliori@giulioriotta.com [~/public_html]# find /home/giuliori/public_html -type f -mtime -2 -exec ls -al {} \;
+
+root@esm1271 ~]# grep 587 /root/admin/sgfirewall
+iptables -I out_sg   -p tcp --dport 587 -j ACCEPT
+
+curl -s -o /dev/null -w "Connect: %{time_connect} TTFB: %{time_starttransfer} Total time: %{time_total} \n"
+rsync -avz -e 'ssh -p 22007' ./folder_to_send user@50.115.22.152:/destination_path
+
+#set localtime
+For root: root@serv01 [/etc]# ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
+For chroot: root@serv01 [/var/suexec/baseos]# ln -sf /usr/share/zoneinfo/Europe/London /var/suexec/baseos/etc/localtime
+
+#check 
+curl -sILv --resolve www.mylendingpal.com:443:$(dig +short www.mylendingpal.com.cdn.cloudflare.net @8.8.8.8 | head -1) https://www.mylendingpal.com/ 2>&1 1>/dev/null
+
+#rsync
+rsync -e "ssh -p18765" rsync_test.txt dimita99@es13.siteground.eu:/home/dimita99/public_html - will upload the file rsync_test.txt to the server
+
+rsync -e "ssh -p18765" dimita99@es13.siteground.eu:/home/dimita99/public_html/rsync_test123.txt . - will download the file rsync_test123.txt to the current directory of the local comp
+
+tail -f /usr/local/cpanel/logs/error_log
+ll /var/lib/mysql/*.err
+/var/lib/mysql/mysql.err
+
+cd logs
+./* | grep Apr | grep -v ftp | grep MauiBot | wc -l
+./* | grep Apr | grep -v ftp | grep bot | wc -l
+./* | grep Apr | awk '{print $1}' | sort -n | uniq -c | sort -nr | head -n50
+/* | grep Apr | grep 109.199.127.153 | awk '{print $5}' | sort -n | uniq -c | sort -nr | head -n50
+cd access-logs
+./* | awk '{print $1}' | sort -n | uniq -c | sort -nr | head -n50
+/* | grep 109.199.127.153 | grep cron | wc -l
+./* | grep 109.199.127.153 | grep ajax | wc -l
+
+#check missing pages 404
+read -p "List all domains (or just the ones more probably hitting highest 404 stats)? 1/0: " listall; minabs=250; minpct=10; dir=$(pwd); cd ~/; echo -e "\n404 error page statistics for $(date +%B) so far:"; for i in $(find ~/logs/ -type f -ctime -3 -name \*.gz | grep -vE '^ftp|ssl_' | grep $(date +%b-%Y)); do notfound=$(cat $i | gzip -d | awk '{print $9}' | grep -c '404'); requests=$(cat $i | gzip -d | wc -l); calc=$(awk -v v1="$notfound" -v v2="$requests" 'BEGIN{printf "%.0f", (v1/v2) * 100}'); if [[ $notfound -ge $minabs ]] || [[ $calc -ge $minpct ]] || [[ $listall == 1 ]]; then echo -e "\n---\n$i - $calc% not found requests ($notfound/$requests)\n"; cat $i | gzip -d | grep '" 404 ' | awk '{print $7}' | sort -n | uniq -c | sort -rn | head -5; fi; done; echo; cd $dir
+
+#ftp
+/var/log/messages | grep pure-ftpd
+grep UserBandwidth /etc/pure-ftpd.conf
+UserBandwidth 38400
+
+#malware scan ds
+root@evm964.sgvps.net [~]# for i in $(ls -1 /var/cpanel/users | grep [a-z] | grep -v root | grep -v kissuomo); do mdet /home/$i/ >> mdet_TID2697520.txt ; done
+
+[~/logs]# zcat * | grep ‘08/May/2018’ | grep 77.104.142.219 | awk ‘{print $7}' | sort | uniq -c | sort -nr | head -n 20
+
+#search for bots
+[~/logs]# zcat cavetmar.es-ssl_log-May-2018.gz |grep bot | awk '{ print $14 }' | sort | uniq -c | sort -n
+
+#cron job
+sudo /usr/local/sbin/sgtail -n1000 /var/log/cron | grep $cpanel_user
+
+#cloudflare cpanel
+ga1mxol3@it20 [~/.cpanel/datastore]# cp cloudflare_data.yaml cloudflare_data.yaml-bkp
+
+sudo /usr/local/sbin/sgtail -n9999999 /usr/local/cpanel/logs/access_log | grep ‘$cpanel’
+
+/usr/local/letsencrypt/logs
+
+grep “25/Jan/2018" /usr/local/apache/domlogs/* | cut -d[ -f2 | cut -d] -f1 | awk -F: ‘{print $2":“$3}’ | sort -nk1 -nk2 | uniq -c | awk ‘{ if ($1 > 790) print $0}’
+
+crontab -l -u $cpanel
+
+/etc/init.d/suexec-chroot cleanuser $cpanel
+
+
+sudo /usr/local/letsencrypt/bin/add_to_queue.sh 
+
+sudo /usr/local/letsencrypt/bin/issue_renew_cancel_cert.pl --action=issue --domain=
+ ccpanel/public_html --force
+
+sed 's@"@\n@g;/BEGIN/s@\\n@\n@g' new_cert | sed '/BEGIN/,/END/!d'
+
+sudo sgchown marke833 /home/marke833/FRAMEWORK/CANCELLARE/v1/common/.well-known/
+
+#time to first byte
+curl -o /dev/null -w "Connect: %{time_connect} TTFB: %{time_starttransfer} Total time: %{time_total} \n" domain.com
+curl --cookie "wpSGCacheBypass=1" -s -o /dev/null -w "Connect: %{time_connect} TTFB: %{time_starttransfer} Total time: %{time_total} \n" -X GET "https://www.climbmountkilimanjaro.com/"
+
+#ssl email
+echo Q | openssl s_client -servername domain.com -connect domain.com:993 2>&1 | openssl x509 -noout -subject -issuer -dates
+openssl s_client -connect api-3t.sandbox.paypal.com:443 -showcerts -CApath /etc/ssl/certs/ 
+
+
+LimitRequestBody 99999999999
+SubstituteMaxLineLength 30m
+
+
+find /home/walterp2/public_html -name “*.zip” -maxdepth 1 -exec rm -rf {} \;
+
+#sleep loop
+for ($i=0;$i<=100;$i++){sleep(1);}
+
+#ftp transfer
+wget -mbr --passive-ftp --ftp-user=‘transfer’ --ftp-pass=‘Zxfx%648’ ftp://92.222.70.201/httpdocs/coninnova.it
+
+#wordpress multisite
+wp super-admin add administrator --skip-themes --skip-plugins
+wp cache flush; wp rewrite flush; wp sg purge; wp transient delete --expired
+
+
+/var/log/maillog* | grep Login | awk ‘{print $10}’ |awk -F= ‘{print $2}’ |sort -n |uniq
+
+#IOPS
+support@star [~]# /usr/local/bin/get_iops.sh --name=c53428 | awk ‘$5+$6 >= 20000 { print $0 }’ |awk ‘{print $1 ” ” $2 ” \| IOPs-Read: ” $5 ” \| IOPs-Write: ” $6}'
+
+
+[~/access-logs]# grep -i uptime propertyinvestmentsuk.co.uk* |awk ‘{print $9}’ |sort -n |uniq -c
+
+#IPTables
+grep 587 /root/admin/sgfirewall
+iptables -I out_sg   -p tcp --dport 587 -j ACCEPT
+
+strace -s 3000 -p `pgrep -u $cPanel_User php`
+
+while true; do pid=$(pgrep 'processname' | head -1); if [[ -n "$pid" ]]; 
+then strace  -s 2000 -vvtf -p "$pid"; break; fi; done
+
+grep "2019-02-14" /usr/local/apache/logs/suexec_log | grep -v 'suspendedpage.cgi\|suspendedpage.cgi\|defaultwebpage.cgi' |awk '{print $7}' | sort | uniq -c | sort -nr | head -n10
+
+#Wordpress wp-config error
+sed -i '1s/^\xEF\xBB\xBF//' wp-config.php
+
+# Inode find
+find . -printf "%h\n" | cut -d/ -f-2 | sort | uniq -c | sort -rn
+
+wget http://kb.sitegroundtechsupport.com/easystrace/SGeasyStrace.sh; chmod 755 SGeasyStrace.sh
+
+define( ‘WP_AUTO_UPDATE_CORE’, false );
+
+#Check cPanel version
+ root@c50116.sgvps.net [~]# /usr/local/cpanel/cpanel -V
+ 
+ for i in {1..10}; do curl -sI https://cyicharters.com/ | grep HTTP; done
+ 
+ cat /usr/local/apache/domlogs/dutchdatadude.com | grep '20/Aug/2019' |  awk '{print $1}' | sort | uniq -c | sort -nr | head -n 20
+ 
+ support@giow1002.siteground.us:~$ sudo /usr/local/sbin/sgtail -n1000 /var/lib/mysql/mysql-slow.log |grep cyicharters.com
+ 
+ u363-khzwm6fgzkn4@ukm1000.siteground.biz:~$ grep 77.104.171.148 /var/avalon-config/named/zones/u363-khzwm6fgzkn4/nicksonshirts.com
+ 
+curl -s softaculous.com/scripts.php |grep ^'  413' -A14
+
+#Find largest files
+find . -type f -name "*" -size +50M -exec du -h '{}' \;
+ 
+wp elementor replace_urls http://francescafiocco.com https://francescafiocco.com
+
+wp option update siteground_wizard_activation_redirect 'no'
+
+wp package install wp-cli/profile-command 
+wp profile hook --all --spotlight --orderby=time
+
+#Issue SSL
+u354-reextrk9uxxc@uk1003.siteground.eu:~/CSR$ openssl req -in www.wildrosejane.com.csr -noout -text | grep Subject
+Subject: C=CA, ST=British Columbia, L=Vancouver, O=Wildrose Jane Corp, OU=Wildrose Jane Corp, CN=www.wildrosejane.com/emailAddress=info@wildrosejane.com
+
+grep -HnroE 'menu'
+
+www/mashtalegypt.com/logs$ zcat mashtalegypt.com-2019-11-18.gz | egrep -v "jpg|jpeg|png|css|js|gif|woff|ico|eot" | egrep -v "admin-ajax.php" | grep -i Bytespider | wc -l
+
+#Test Memcache
+u1304-wxhejn7y8rjj@siteground216.com:~$ telnet 127.0.0.1 29756
+stats
+
+#Executions per minute
+root@sm1001.siteground.biz:~# for min in 21 22 23 24 25 26 27 28 29 30 31 32; do echo -n "2019-11-21 21:${min}: " ;grep "2019-11-21 21:${min}" /usr/local/apache/logs/suexec_log | grep -c u887-q3ahkywbv3ks; done
+
+#Send spam emails
+tsvetanv@es3 [~]# for i in $(cat list_of_forwarders.txt); do echo '--- sending to' $i; sleep 1s; mail -s 'Test Message' $i <<< 'This is a test. Please disregard'; done
+
+
+# Close terminal while app is running
+disown -a && exit
+
+support@support.com [~]# fixmailperm snips001
+
+require_once ABSPATH . 'wp-settings.php';
+
+ps -eLF | grep $PID
+
+wp-transfer-api.sgvps.net
+
+output_buffering = On
+ 
+openssl s_client -showcerts -connect lonemountainlogistics.com:443
+
+root@c56439.sgvps.net [/usr/local/apache/domlogs/massimoi]# grep 54.93.56.159 * | awk '{print$1}' |sort|uniq -c | sort -nr
+
+# Cloud server client stats
+http://c17154.sgvps.net/~1h/local-interface/
+
+# Avalon staging
+sc -d -d -d api do $domain app-staging update id=5 push_to_live=1 advanced=1 -j 
+
+dig ANY isc.org@63.217.84.76 +edns=0 +notcp +bufsize=4096
+
+marintodorov@[Hydralisk]:[~] $ phpmyadmin_fix.sh mojekralovstvo.sk gnldm1000.siteground.biz
+Successfully updated the password for u570-8jfhtd3sexpz
+phpMyAdmin auto login URL: https://gnldm1000.siteground.biz/phpmyadmin/index.php?token=pma_login_0f713f8f60582b1a8a456b98e5ded394
+
+curl 'https://centre.stopsilence.net/closecenter.php' > /dev/null 2>&1; echo 'success'
+
+du -hs .??* * 
+
+lsattr .htaccess && head -n2 .htaccess
+
+# check access logs for website response code
+egrep "2020:0[0-6]" /usr/local/apache/domlogs/coleccionistasdemonedas.com | awk '{print $9}' | sort -n | uniq -c | sort -nr
+
+
+ioscan -fnC
+swlist
+chfs -a size=+1G /var/adm/
+/etc/tsconvert && /usr/lbin/modprpw -V
+/sbin/init.d/secsh stop
+stopsrc -s xntpd
+smitty list_installed
+
+#check number of emails sent
+support@support.com [~]# elog bk@kershnerandco.com |grep '19:[0-59]' | grep -oP "A=\K([A-Za-z0-9_.:]+)" | sort | uniq -c | sort -nr
+
+htaccess pass query string
+### Added by Kualo MMQ-482539
+Redirect 301 /emptrack.asp http://www.emperium.net/et/ [R=301,L]
+###
+
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+<IfModule mod_headers.c>
+        Header always set Content-Security-Policy "upgrade-insecure-requests;"
+</IfModule>
+
+### Convert Roundcube database ###
+/usr/local/cpanel/scripts/convert_roundcube_mysql2sqlite
