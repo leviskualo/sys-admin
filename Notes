@@ -8,7 +8,7 @@ bash <(curl -s https://raw.githubusercontent.com/cloudflare/CloudFlare-CPanel/ma
 for shared accounts
 bash <(curl -s https://raw.githubusercontent.com/cloudflare/CloudFlare-CPanel/master/cloudflare.install.sh) -k b4603acd6cceeae8cd8d0f0f39c65f5f -n 'Kualo'
 
-WHM Login 
+WHM Login
 whmapi1 create_user_session user=root service=whostmgrd locale=en | grep url | cut -c 8-
 
 cPanel troubleshoot
@@ -53,7 +53,7 @@ tcp|out|d=587|u=1492
 tcp|out|d=25|u=1492
 csf -dr 2.37.53.88
 kxfw -c
-to allow specific port traffic 
+to allow specific port traffic
 /etc/csf/csf.conf
 
 kill mysql crawler
@@ -285,8 +285,8 @@ ps aux | awk '{$5=int(100 * $6/1024/1024)/100"GB";}{ print;}' | grep rucomf
 /opt/alt/php70/usr/bin/php
 /opt/alt/php71/usr/bin/php bin/magento c:c
 
-disable php errors -> ini_set('display_errors', 0); 
-php_value memory_limit 2048M 
+disable php errors -> ini_set('display_errors', 0);
+php_value memory_limit 2048M
 php_value max_input_vars 10000
 /etc/cl.php.d/alt-php72 $ php -i | grep disable_f (disable mail function)
 
@@ -296,6 +296,10 @@ bash-4.2# cd /etc/cl.php.d
 bash-4.2# grep -R 'max_input' *
 alt-php52/alt_php.ini:max_input_vars=25000
 ##############
+
+### PHP selector enable extensions###
+for version in `selectorctl --list | awk {'print $1'}`; do selectorctl --enable-extensions=fileinfo,mbstring,pdo,mysqlnd,nd_mysql,nd_mysqli,nd_pdo_mysql,ioncube_loader,intl,zip,gd,opcache,redis --version=$version; done
+#####
 
 
 ### Apache/Litespeed disable per account ###
@@ -393,3 +397,37 @@ php -i | grep disable
 
 ### Magento CMD ###
 php bin/magento admin:user:unlock minadmin
+
+### Deploy Jetbackup config ###
+wget http://updates.kualo.net/linux/tools/jet-backup-install/JB-FM-30D-Accounts-Hourly-DB-3System.tar
+jetcli backup --import JB-FM-30D-Accounts-Hourly-DB-3System.tar
+rm -f JB-FM-30D-Accounts-Hourly-DB-3System.tar
+####
+
+### Check disk space of all cpanel users ###
+for FILE in `cat /home/tech/list`; do /scripts/whoowns $FILE; done
+for USER in `cat /home/tech/user_list`; do du -sch /home/$USER | grep -v total; done
+for FILE in `cat /home/tech/list`; do du -sch `/scripts/whoowns $FILE` | grep -v total ; done
+/var/lib/mysql # for FILE in `cat /home/tech/list`; do du -sch ./`/scripts/whoowns $FILE`* | grep -v total ; done
+###
+
+### Extract email address from cpanel inbox ###
+cd /home/disabled/mail/disabledsailing.org/oa
+grep -a "From" mailboxes/INBOX/dbox-Mails/dovecot.index.cache | grep -a @ > emails
+cat emails | grep -ao -P '(?<=<).*(?=>)'
+
+manually corrected a few errors in the file, then sort and uniq
+####
+
+
+### cPanel delete mailbox emails older than 90 days ###
+#!/bin/bash
+
+# Variables
+MONTHLY=$(date --date='-1 month' '+%d-%b-%Y')
+
+#
+# Go
+#
+doveadm expunge -u trifo@mywp.gq mailbox INBOX SENTBEFORE $MONTHLY UNFLAGGED
+####
