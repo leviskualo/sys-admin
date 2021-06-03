@@ -66,8 +66,14 @@ check for inodes
 echo "Detailed Inode usage for: $(pwd)" ; for d in `find -maxdepth 1 -type d |cut -d\/ -f2 |grep -xv . |sort`; do c=$(find $d |wc -l) ; printf "$c\t\t- $d\n" ; done ; printf "Total: \t\t$(find $(pwd) | wc -l)\n"
 
 
-exim spamming command
+### exim spamming command ###
 grep cwd /var/log/exim_mainlog |awk {'print $4'} |awk -F "=" {'print $2'} |sort |uniq -c |sort -n  |tail
+
+root@hector.ldn.kualo.net /var/spool/exim/input # find /var/spool/exim/input -name "*-H" -type f -exec grep -r "X-PHP-Filename" {} \;
+
+root@hector.ldn.kualo.net /var/spool/exim/input # find /var/spool/exim/input -name "*-H" -type f -exec grep -r '\-\-auth_id' {} \;
+--auth_id javier@wickerhamilton.co.uk
+#####
 
 access-logs -> /etc/apache2/logs/domlogs/demoonethirdstor
 
@@ -430,4 +436,9 @@ MONTHLY=$(date --date='-1 month' '+%d-%b-%Y')
 # Go
 #
 doveadm expunge -u trifo@mywp.gq mailbox INBOX SENTBEFORE $MONTHLY UNFLAGGED
+####
+
+### killing lsphp processes older than 1 week ###
+
+killall --quiet --older-than 1w lsphp
 ####

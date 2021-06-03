@@ -1,10 +1,9 @@
-My Linux cheatsheet
-
 #regenerate vhost
 sudo /usr/local/supercache/bin/generate_ngx_vhosts.sh $cpanel
 
 #softaculous script
 /usr/local/cpanel/3rdparty/bin/php /usr/local/cpanel/whostmgr/docroot/cgi/softaculous/cron.php
+/usr/local/cpanel/3rdparty/bin/php /usr/local/cpanel/whostmgr/docroot/cgi/softaculous/cli.php --update_universal --off_sitepad=1
 
 zcat elettrodomesticiericambi.it-ssl_log-Mar-2018.gz | grep '20/Mar' | awk {'print $1'} | sort -n | uniq -c | sort -nr | head -10
 grep -r 'Jan 19 19:[4-6]' /var/log/* | grep -iE 'gratuitous|keepalive|arp'
@@ -30,7 +29,7 @@ rsync -avz -e 'ssh -p 22007' ./folder_to_send user@50.115.22.152:/destination_pa
 For root: root@serv01 [/etc]# ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
 For chroot: root@serv01 [/var/suexec/baseos]# ln -sf /usr/share/zoneinfo/Europe/London /var/suexec/baseos/etc/localtime
 
-#check 
+#check
 curl -sILv --resolve www.mylendingpal.com:443:$(dig +short www.mylendingpal.com.cdn.cloudflare.net @8.8.8.8 | head -1) https://www.mylendingpal.com/ 2>&1 1>/dev/null
 
 #rsync
@@ -85,7 +84,7 @@ crontab -l -u $cpanel
 /etc/init.d/suexec-chroot cleanuser $cpanel
 
 
-sudo /usr/local/letsencrypt/bin/add_to_queue.sh 
+sudo /usr/local/letsencrypt/bin/add_to_queue.sh
 
 sudo /usr/local/letsencrypt/bin/issue_renew_cancel_cert.pl --action=issue --domain=
  ccpanel/public_html --force
@@ -100,7 +99,7 @@ curl --cookie "wpSGCacheBypass=1" -s -o /dev/null -w "Connect: %{time_connect} T
 
 #ssl email
 echo Q | openssl s_client -servername domain.com -connect domain.com:993 2>&1 | openssl x509 -noout -subject -issuer -dates
-openssl s_client -connect api-3t.sandbox.paypal.com:443 -showcerts -CApath /etc/ssl/certs/ 
+openssl s_client -connect api-3t.sandbox.paypal.com:443 -showcerts -CApath /etc/ssl/certs/
 
 
 LimitRequestBody 99999999999
@@ -134,7 +133,7 @@ iptables -I out_sg   -p tcp --dport 587 -j ACCEPT
 
 strace -s 3000 -p `pgrep -u $cPanel_User php`
 
-while true; do pid=$(pgrep 'processname' | head -1); if [[ -n "$pid" ]]; 
+while true; do pid=$(pgrep 'processname' | head -1); if [[ -n "$pid" ]];
 then strace  -s 2000 -vvtf -p "$pid"; break; fi; done
 
 grep "2019-02-14" /usr/local/apache/logs/suexec_log | grep -v 'suspendedpage.cgi\|suspendedpage.cgi\|defaultwebpage.cgi' |awk '{print $7}' | sort | uniq -c | sort -nr | head -n10
@@ -144,6 +143,7 @@ sed -i '1s/^\xEF\xBB\xBF//' wp-config.php
 
 # Inode find
 find . -printf "%h\n" | cut -d/ -f-2 | sort | uniq -c | sort -rn
+find . -xdev -printf '%h\n' | sort | uniq -c | sort -k 1 -nr | head
 
 wget http://kb.sitegroundtechsupport.com/easystrace/SGeasyStrace.sh; chmod 755 SGeasyStrace.sh
 
@@ -151,25 +151,25 @@ define( ‘WP_AUTO_UPDATE_CORE’, false );
 
 #Check cPanel version
  root@c50116.sgvps.net [~]# /usr/local/cpanel/cpanel -V
- 
+
  for i in {1..10}; do curl -sI https://cyicharters.com/ | grep HTTP; done
- 
+
  cat /usr/local/apache/domlogs/dutchdatadude.com | grep '20/Aug/2019' |  awk '{print $1}' | sort | uniq -c | sort -nr | head -n 20
- 
+
  support@giow1002.siteground.us:~$ sudo /usr/local/sbin/sgtail -n1000 /var/lib/mysql/mysql-slow.log |grep cyicharters.com
- 
+
  u363-khzwm6fgzkn4@ukm1000.siteground.biz:~$ grep 77.104.171.148 /var/avalon-config/named/zones/u363-khzwm6fgzkn4/nicksonshirts.com
- 
+
 curl -s softaculous.com/scripts.php |grep ^'  413' -A14
 
 #Find largest files
 find . -type f -name "*" -size +50M -exec du -h '{}' \;
- 
+
 wp elementor replace_urls http://francescafiocco.com https://francescafiocco.com
 
 wp option update siteground_wizard_activation_redirect 'no'
 
-wp package install wp-cli/profile-command 
+wp package install wp-cli/profile-command
 wp profile hook --all --spotlight --orderby=time
 
 #Issue SSL
@@ -203,7 +203,7 @@ ps -eLF | grep $PID
 wp-transfer-api.sgvps.net
 
 output_buffering = On
- 
+
 openssl s_client -showcerts -connect lonemountainlogistics.com:443
 
 root@c56439.sgvps.net [/usr/local/apache/domlogs/massimoi]# grep 54.93.56.159 * | awk '{print$1}' |sort|uniq -c | sort -nr
@@ -222,7 +222,7 @@ phpMyAdmin auto login URL: https://gnldm1000.siteground.biz/phpmyadmin/index.php
 
 curl 'https://centre.stopsilence.net/closecenter.php' > /dev/null 2>&1; echo 'success'
 
-du -hs .??* * 
+du -hs .??* *
 
 lsattr .htaccess && head -n2 .htaccess
 
